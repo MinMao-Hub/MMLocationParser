@@ -58,7 +58,7 @@
 /// 解析省份
 - (NSString *)parserProvince {
     NSString *pattern = @"^.*?省|.*?自治区|.*?行政区|.*?市";
-    return [self matchWithPattern:pattern];
+    return [self matchOnceWithPattern:pattern];
 }
 
 
@@ -125,7 +125,7 @@
     return result;
 }
 
-/// 正则表达式一次匹配
+/// 正则表达式多次次匹配，取最后一条
 /// @param pattern 正则表达式String
 - (NSString *)matchWithPattern:(NSString *)pattern {
     NSError *error;
@@ -133,12 +133,24 @@
     NSArray *results = [regex matchesInString:self.location options:0 range:NSMakeRange(0, self.location.length)];
     if (results.count > 0) {
         NSTextCheckingResult *result = results.lastObject;
-        //一次匹配难以区分 -> [自治区、 行政区 ] => [区]，所以还是多次匹配，取最后一条
-//        NSTextCheckingResult *result = [regex firstMatchInString:self.location options:0 range:NSMakeRange(0, self.location.length)];
         if (result) {
             if (result.range.length > 0) {
                 return [self.location substringWithRange:result.range];
             }
+        }
+    }
+    return nil;
+}
+
+/// 正则表达式一次匹配
+/// @param pattern 正则表达式String
+- (NSString *)matchOnceWithPattern:(NSString *)pattern {
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options: NSRegularExpressionCaseInsensitive error:&error];
+    NSTextCheckingResult *result = [regex firstMatchInString:self.location options:0 range:NSMakeRange(0, self.location.length)];
+    if (result) {
+        if (result.range.length > 0) {
+            return [self.location substringWithRange:result.range];
         }
     }
     return nil;

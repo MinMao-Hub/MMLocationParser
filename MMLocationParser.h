@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface MMLocationParser : NSObject
 
+@property (nonatomic, readonly) NSString *location;  //传入的地址
+
 @property (nonatomic, readonly) NSString *province; //省、自治区、直辖市、特别行政区
 
 @property (nonatomic, readonly) NSString *city;     //市、自治州、地区、行政单位
@@ -47,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSString *name;     //乡镇 + 街道信息以及楼号、门牌号等
 
-@property (nonatomic, readonly) NSArray  *results;  //列表的形式的返回 @[省, 市, 区(县), (镇), 街道]
+@property (nonatomic, readonly) NSArray  *results;  //列表的形式的返回 @[省, 市, 区(县), 乡(镇), 街道]
 
 /// 类构造方法
 /// @param location 地址字符串 eg: 上海市浦东新区金科路2000号
